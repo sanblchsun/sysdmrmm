@@ -17,7 +17,9 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL + "?async_fallback=True")
+# Use sync driver for alembic (replace asyncpg with psycopg2 or use plain postgresql)
+sync_url = settings.DATABASE_URL.replace("+asyncpg", "")
+config.set_main_option("sqlalchemy.url", sync_url)
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
