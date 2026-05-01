@@ -1,0 +1,52 @@
+<!-- app/templates/index.html -->
+{% extends "base.html" %} {% block body %}
+<div id="container">
+  <!-- STATE (источник истины для top-panel) -->
+  <input type="hidden" id="target-id" name="target_id" />
+  <input type="hidden" id="target-type" name="target_type" />
+
+  <div
+    id="left-panel"
+    hx-get="/ui/left-menu"
+    hx-trigger="load, data-reload from:body"
+    hx-target="this"
+  ></div>
+
+  <div id="vertical-splitter" class="splitter vertical"></div>
+
+  <div id="right-container">
+    <div
+      id="top-right"
+      hx-get="/ui/top-panel{% if request.url.query %}?{{ request.url.query }}{% endif %}"
+      hx-trigger="load, data-reload from:body"
+      hx-target="this"
+    ></div>
+
+    <div id="horizontal-splitter" class="splitter horizontal"></div>
+
+    <div
+      id="bottom-right"
+      hx-get="/ui/bottom-panel{% if request.url.query %}?{{ request.url.query }}{% endif %}"
+      hx-trigger="load"
+      hx-target="this"
+    >
+      Нижняя панель (пока пусто)
+    </div>
+  </div>
+
+  <div id="loading-indicator" style="display: none">
+    <span class="loading-spinner"></span>
+  </div>
+</div>
+<div id="agent-modal" class="modal" style="display: none"></div>
+<div
+  id="notification"
+  style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    max-width: 300px;
+  "
+></div>
+{% endblock %}

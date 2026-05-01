@@ -1,0 +1,498 @@
+/* app/static/style.css */
+
+/* Основной layout */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+#main {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* Контейнеры */
+#container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+#left-panel {
+  width: 250px;
+  min-width: 50px;
+  background-color: #1e1e1e;
+  color: #fff;
+  overflow: auto;
+  padding: 0.5rem;
+}
+
+.splitter.vertical {
+  width: 5px;
+  cursor: col-resize;
+  background-color: #444;
+  z-index: 10;
+}
+
+#right-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#top-right {
+  min-height: 0;
+  height: 50%;
+  background-color: #252526;
+  border: 1px solid red; /* временно для отладки */
+  color: #fff;
+  overflow: auto;
+}
+
+.splitter.horizontal {
+  height: 2px;
+  cursor: row-resize;
+  background-color: transparent;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.splitter.horizontal::before {
+  content: "";
+  width: 60px;
+  height: 30px;
+  background-color: #ff9800;
+  border-radius: 3px;
+  z-index: 11;
+}
+
+.splitter.horizontal:hover::before {
+  background-color: #ffc107;
+}
+
+#toggle-all-btn {
+  min-height: 50px;
+  min-width: 130px;
+  height: 5%;
+  background-color: #2f55c0;
+  color: #fff;
+  overflow: auto;
+  padding: 0.5rem;
+  margin: 1%;
+}
+
+#reset-splitters-btn {
+  min-height: 50px;
+  min-width: 130px;
+  height: 5%;
+  background-color: #2f55c0;
+  color: #fff;
+  overflow: auto;
+  padding: 0.5rem;
+  margin: 1%;
+}
+
+#bottom-right {
+  flex: 1;
+  min-height: 0;
+  height: 50%;
+  background-color: #1e1e1e;
+  border: 1px solid blue; /* временно для отладки */
+  color: #fff;
+  overflow: auto;
+}
+
+/* Дерево слева ====================================================================*/
+/* ===== Скрытые списки ===== */
+.collapsible {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+}
+
+/* ===== Стрелки ===== */
+.arrow {
+  cursor: pointer;
+  width: 1em;
+  display: inline-block;
+  transition: transform 0.25s ease;
+  user-select: none;
+}
+.arrow.expanded {
+  transform: rotate(90deg);
+}
+
+/* ===== Node ===== */
+.node {
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+.node:hover {
+  background-color: #3b3b3b;
+  color: #fff;
+}
+.arrow:hover {
+  color: #ffc107;
+}
+.label:hover {
+  text-decoration: underline;
+}
+
+/* ===== Label активного узла ===== */
+.label.is-active {
+  background-color: #2f55c0;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 6px;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* ===== Плавное toggleAll ===== */
+.collapsible {
+  transition: max-height 0.3s ease;
+}
+
+/* ===== Кнопки ===== */
+#toggle-all-btn,
+#reset-splitters-btn {
+  min-height: 50px;
+  min-width: 130px;
+  height: 5%;
+  background-color: #2f55c0;
+  color: #fff;
+  overflow: auto;
+  padding: 0.5rem;
+  margin: 1%;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+#toggle-all-btn:hover,
+#reset-splitters-btn:hover {
+  background-color: #3f70d0;
+}
+
+/* ===== Адаптив ===== */
+@media screen and (max-width: 600px) {
+  .label {
+    font-size: 14px;
+  }
+  #toggle-all-btn,
+  #reset-splitters-btn {
+    font-size: 14px;
+    min-width: 100px;
+  }
+}
+
+/* Красивая таблица справа сверху ========================================== */
+.agents-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #eee;
+  background-color: #1e1e1e;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.agents-table thead {
+  background: linear-gradient(90deg, #2c3e50, #34495e);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.2em;
+}
+
+.agents-table th {
+  background-color: #69747e;
+  color: #030202;
+  text-align: left;
+  padding: 8px 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  transition:
+    background 0.3s,
+    transform 0.15s;
+}
+
+.agents-table td {
+  padding: 8px 15px;
+  border-bottom: 1px solid #ddd;
+  transition:
+    background 0.3s,
+    transform 0.15s;
+}
+
+.agents-table thead th {
+  padding: 12px 15px;
+}
+
+.agents-table tbody tr {
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border-radius: 6px;
+  display: table-row;
+}
+
+.agents-table tbody tr:nth-child(even) {
+  background-color: #252525;
+}
+
+/* Hover только для неактивных строк */
+.agents-table tbody tr:hover:not(.is-active) {
+  color: #fff;
+  background: linear-gradient(90deg, #3b3b3b, #4b4b4b);
+  transform: scale(1.01);
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+/* Активная строка таблицы */
+.agents-table tr.is-active {
+  background-color: #03174e !important;
+  color: #fff;
+}
+
+/* Мобильная адаптация */
+@media screen and (max-width: 768px) {
+  .agents-table th,
+  .agents-table td {
+    padding: 10px 12px;
+    font-size: 0.85em;
+  }
+}
+
+/* Загрузочный индикатор */
+#loading-indicator {
+  font-size: 16px;
+  text-align: center;
+  color: gray;
+  opacity: 0.8;
+  display: none;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(0, 0, 0, 0.3);
+  border-top-color: black;
+  border-radius: 50%;
+  animation: spinner 1s linear infinite;
+}
+
+
+/* Модальное окно */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 5% auto;
+  padding: 0;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.modal-close {
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.modal-close:hover {
+  color: #e74c3c;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.agent-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #555;
+  font-size: 0.9em;
+  margin-bottom: 4px;
+}
+
+.info-value {
+  color: #333;
+  font-size: 1em;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #10b981;
+  border-radius: 4px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-secondary {
+  background-color: #2196f3;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #636e72;
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-close {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+/* Подсветка строки таблицы */
+.row-active {
+  background-color: rgba(76, 175, 80, 0.1) !important;
+  border-left: 3px solid #4caf50 !important;
+}
+
+/* app/static/style.css - добавляем новые стили */
+/* Стили для выбора отделов */
+.department-option:hover {
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.department-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+}
+
+/* Анимация загрузки */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Стили для кнопок в модальном окне */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Подсветка выбранного отдела */
+.department-option input[type="radio"]:checked + span {
+  font-weight: bold;
+  color: #2196f3;
+}
+
+.department-option input[type="radio"]:checked ~ .department-option {
+  background-color: #e3f2fd;
+}

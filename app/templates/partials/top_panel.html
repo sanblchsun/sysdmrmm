@@ -1,0 +1,85 @@
+<!-- app/templates/partials/top_panel.html -->
+<div class="top-panel">
+  {% if company %}
+  <div
+    class="company-header"
+    style="padding: 8px 12px; background: #2a2a2a; color: #ddd"
+  >
+    <strong>{{ company.name }}</strong>
+    {% if company.external_ip %} ·
+    <span style="color: #888">{{ company.external_ip }}</span>{% endif %}
+  </div>
+  {% endif %} {% if agents %}
+  <table class="agents-table">
+    <thead>
+      <tr>
+        {% for col in agent_columns %}
+        <th>{{ col }}</th>
+        {% endfor %}
+        <th>RDP</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in agents %}
+      <tr data-agent-id="{{ a.id }}">
+        <td>
+          <span
+            class="online-dot {% if a.is_online %}online{% else %}offline{% endif %}"
+          ></span>
+        </td>
+        <td>{{ a.name_pc }}</td>
+        <td>{{ a.user_name or '' }}</td>
+        <td>{{ a.ip_addr or '' }}</td>
+        <td>{{ a.company_name or '' }}</td>
+        <td>{{ a.department_name or '' }}</td>
+        <td>{% if a.is_online %}Online{% else %}Offline{% endif %}</td>
+        <td>{{ a.exe_version or '' }}</td>
+        <td>
+          <input
+            type="checkbox"
+            class="telemetry-cb"
+            data-agent-id="{{ a.id }}"
+            data-telemetry-mode="{{ a.telemetry_mode or 'none' }}"
+            onclick="event.stopPropagation()"
+            onchange="toggleTelemetry(this)"
+          />
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-primary btn-rdp"
+            style="padding: 4px 10px; font-size: 12px"
+            data-agent-id="{{ a.id }}"
+          >
+            🖥️ RDP
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p style="padding: 20px; text-align: center; color: #999">Нет агентов</p>
+  {% endif %}
+</div>
+
+<script>
+  (function () {
+    document.querySelectorAll(".telemetry-cb").forEach(function (cb) {
+      cb.checked = cb.getAttribute("data-telemetry-mode") === "full";
+    });
+
+    function openRDP(agentId) {
+      window.open(
+        "/ui/rdp-view?agent_id=" + encodeURIComponent(agentId),
+        "_blank",
+      );
+    }
+    document.querySelectorAll(".btn-rdp").forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        openRDP(btn.getAttribute("data-agent-id"));
+      });
+    });
+  })();
+</script>

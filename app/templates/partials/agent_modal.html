@@ -1,0 +1,102 @@
+<!-- app/templates/partials/agent_modal.html -->
+<div class="modal-content">
+  <div class="modal-header">
+    <h2>Изменение отдела агента</h2>
+    <span class="modal-close" id="modal-close-btn">&times;</span>
+  </div>
+
+  <div class="modal-body">
+    <div class="agent-info-grid">
+      <div class="info-item">
+        <span class="info-label">Агент:</span>
+        <span class="info-value">{{ agent.name_pc }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Пользователь:</span>
+        <span class="info-value">{{ agent.user_name }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Компания:</span>
+        <span class="info-value">{{ agent.company_name }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Текущий отдел:</span>
+        <span class="info-value">{{ agent.current_department_name }}</span>
+      </div>
+    </div>
+
+    <div class="department-selection" style="margin: 20px 0">
+      <h3 style="margin-bottom: 15px">Выберите новый отдел:</h3>
+
+      <div
+        class="departments-list"
+        style="
+          max-height: 200px;
+          overflow-y: auto;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          padding: 10px;
+        "
+        data-current-dept-id="{% if agent.current_department_id %}{{ agent.current_department_id }}{% else %}0{% endif %}"
+      >
+        <!-- Опция "Без отдела" -->
+        <div class="department-option" style="margin-bottom: 10px">
+          <label
+            style="
+              display: flex;
+              align-items: center;
+              cursor: pointer;
+              padding: 5px;
+            "
+          >
+            <input
+              type="radio"
+              name="department"
+              value="0"
+              style="margin-right: 10px"
+            />
+            <span>🏠 Без отдела</span>
+          </label>
+        </div>
+
+        <!-- Список отделов компании -->
+        {% for dept in departments %}
+        <div class="department-option" style="margin-bottom: 10px">
+          <label
+            style="
+              display: flex;
+              align-items: center;
+              cursor: pointer;
+              padding: 5px;
+            "
+          >
+            <input
+              type="radio"
+              name="department"
+              value="{{ dept.id }}"
+              style="margin-right: 10px"
+            />
+            <span>📁 {{ dept.name }}</span>
+          </label>
+        </div>
+        {% endfor %} {% if not departments %}
+        <div style="color: #666; font-style: italic; padding: 10px">
+          В этой компании нет отделов. Создайте отделы сначала.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button
+        class="btn btn-primary"
+        id="save-department-btn"
+        data-agent-id="{{ agent.id }}"
+      >
+        💾 Сохранить изменения
+      </button>
+
+      <button class="btn btn-secondary" id="cancel-btn">✕ Отмена</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<!-- app/templates/partials/left_menu.html -->
+<span class="tree-controls">
+  <button id="reset-splitters-btn" hx-on="click: resetSplitters()">
+    Сбросить <br />разделители
+  </button>
+  <br />
+  <button id="toggle-all-btn" hx-on="click: toggleAll()">Развернуть всё</button>
+</span>
+<br /><br />
+{% macro render_node(node) %}
+<li>
+  {% if node.children %}
+  <!-- ================= GROUP NODE ================= -->
+  <div class="node">
+    <!-- стрелка раскрытия -->
+    <span class="arrow" hx-on="click: toggleNode('{{ node.name_id }}', this)"
+      >▶</span
+    >
+    <!-- DROP ZONE -->
+    <div
+      class="label"
+      data-node-type="{{ node.type }}"
+      data-node-id="{{ node.id }}"
+    >
+      <!-- НАВИГАЦИЯ -->
+      <a
+        hx-get="/ui/top-panel"
+        hx-target="#top-right"
+        hx-swap="innerHTML"
+        hx-trigger="click"
+        hx-include="#target-id,#target-type"
+        hx-push-url="/agents?target_type={{ node.type }}&target_id={{ node.id }}"
+        hx-indicator="#loading-indicator"
+        hx-on="
+    click:
+      document.getElementById('target-id').value='{{ node.id }}';
+      document.getElementById('target-type').value='{{ node.type }}';
+      document.getElementById('bottom-right').innerHTML =
+        '<div class=&quot;empty-panel&quot;>Выберите агента</div>';
+  "
+      >
+        {% if node.type == "company" %} 🏛 {{ node.name }} {% elif node.type ==
+        "unassigned" %} 📦 {{ node.name }} {% elif node.type == "department" %}
+        {{ node.name }} {% else %} {{ node.name }} {% endif %}
+      </a>
+    </div>
+  </div>
+  <!-- ДЕТИ -->
+  <ul class="collapsible" data-id="{{ node.name_id }}">
+    {% for child in node.children %} {{ render_node(child) }} {% endfor %}
+  </ul>
+  {% else %}
+  <!-- ================= AGENT LEAF ================= -->
+  <div class="node agent-leaf">
+    <span class="agent-indent"></span>
+    {% if node.type == "department" %}
+    <span class="label agent-label"> 🗍{{ node.name }} </span> 
+    {% else %}
+    <span class="label agent-label"> 👤 {{ node.name }} </span>
+    {% endif %}
+  </div>
+  {% endif %}
+</li>
+{% endmacro %}
+<ul id="tree-root" class="tree-root">
+  {% for company in companies %} {{ render_node(company) }} {% endfor %}
+</ul>
